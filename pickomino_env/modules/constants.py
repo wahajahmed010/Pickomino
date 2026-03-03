@@ -3,6 +3,11 @@
 from __future__ import annotations
 
 __all__ = [
+    "ACTION_BG_COLOR",
+    "ACTION_COLOR",
+    "ACTION_DISPLAY_X",
+    "ACTION_DISPLAY_Y",
+    "ACTION_FONT_SIZE",
     "ACTION_INDEX_DICE",
     "ACTION_INDEX_ROLL",
     "ACTION_ROLL",

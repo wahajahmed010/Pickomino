@@ -371,11 +371,12 @@ class Renderer:
 
     def _draw_action_display(self) -> None:
         """Draw current action selection."""
-        if self._action is not None:
+        if self._action is not None and self._window is not None:
             dice_idx, button_action = self._action
             font = pygame.font.SysFont(None, 32)
             text = f"Action: ({dice_idx}, {button_action})"
-            surface = font.render(text, True, (0, 0, 0))
+            antialias = True
+            surface = font.render(text, antialias, (0, 0, 0))
             self._window.blit(surface, (ACTION_DISPLAY_X, ACTION_DISPLAY_Y))
 
     def set_action(self, action: tuple[int, int] | None) -> None:
