@@ -15,6 +15,7 @@ import pygame  # Uses pygame-ce, see pyproject.toml
 from pickomino_env.modules.constants import (
     ACTION_DISPLAY_X,
     ACTION_DISPLAY_Y,
+    ACTION_FONT_SIZE,
     BACKGROUND_COLOR,
     BUTTON_COLOR,
     BUTTON_FONT_SIZE,
@@ -374,7 +375,7 @@ class Renderer:
         """Draw current action selection."""
         if self._action is not None and self._window is not None:
             dice_idx, button_action = self._action
-            font = pygame.font.SysFont(None, 32)
+            font = pygame.font.SysFont(None, ACTION_FONT_SIZE)
             text = f"Action: ({dice_idx}, {button_action})"
             antialias = True
             surface = font.render(text, antialias, (0, 0, 0))
