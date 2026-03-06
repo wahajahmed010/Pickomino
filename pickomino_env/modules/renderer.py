@@ -195,14 +195,14 @@ class Renderer:
         return dice_index
 
     def get_full_action(self) -> tuple[int, int] | None:
-        """Get the complete action: (button_action, dice_index) or None if incomplete.
+        """Get the complete action: (dice_index, button_action) or None if incomplete.
 
         Only used during manual play via main.py.
         """
-        if self._action_click_button is not None and self._action_click_dice is not None:
+        if self._action_click_dice is not None and self._action_click_button is not None:
             self._action = (self._action_click_dice, self._action_click_button)
-            self._action_click_button = None
             self._action_click_dice = None
+            self._action_click_button = None
             return self._action
         return None
 
