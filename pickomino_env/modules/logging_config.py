@@ -9,7 +9,7 @@ try:  # pylint: disable=too-many-try-statements
     from loguru import logger
 
     logger.remove()  # Remove default stderr handler.
-    logger.add(Path(tempfile.gettempdir()) / "pickomino.log", mode="w")
+    logger.add(Path(tempfile.gettempdir()) / "pickomino.log", mode="w", rotation="10 MB")
 
     def log(message: str) -> None:
         """Log a debug message if loguru is available."""
