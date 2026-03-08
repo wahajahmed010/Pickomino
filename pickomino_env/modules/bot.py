@@ -12,6 +12,7 @@ from pickomino_env.modules.constants import (
     ACTION_ROLL,
     ACTION_STOP,
     MIN_ROLLS_FOR_WORM_STRATEGY,
+    NUM_DICE,
     WORM_INDEX,
     WORM_VALUE,
 )
@@ -42,6 +43,20 @@ class Bot:
         if self.current_policy == self.HEURISTIC:
             action = self._heuristic_policy(rolled, collected, smallest)
         return action
+
+    @staticmethod
+    def _no_dice_remaining_after_collect(
+        collected: list[int],
+        rolled: NDArray[np.int_],
+        action_dice: int,
+        action_roll: int,
+    ) -> int:
+        """Check if rolling is even possible."""
+        dice_after_collect = sum(collected) + rolled[action_dice]
+        if dice_after_collect >= NUM_DICE:
+            action_roll = ACTION_STOP
+
+        return action_roll
 
     def _heuristic_policy(
         self,
@@ -82,6 +97,9 @@ class Bot:
         # 1. On or after the third roll, take worms if you can.
         if self.roll_counter >= MIN_ROLLS_FOR_WORM_STRATEGY and not collected[WORM_INDEX] and rolled[WORM_INDEX]:
             action_dice = WORM_INDEX
+
+        # After selecting action_dice, check if rolling is even possible.
+        action_roll = self._no_dice_remaining_after_collect(collected, rolled, action_dice, action_roll)
 
         # 3. Quit as soon as you can take a tile: dice sum for a visible tile reached and worm collected.
         worm_collected = bool(collected[WORM_INDEX]) or action_dice == WORM_INDEX
