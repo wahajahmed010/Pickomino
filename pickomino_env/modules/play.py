@@ -13,7 +13,7 @@ class ManualPlay:  # pylint: disable=too-few-public-methods.
     def __init__(self) -> None:
         """Initialize ManualPlay."""
 
-    def play_manual_game_human(self, env: PickominoEnv) -> None:
+    def play(self, env: PickominoEnv) -> None:
         """Play manual game."""
         env.reset()
 
@@ -29,18 +29,18 @@ class ManualPlay:  # pylint: disable=too-few-public-methods.
                 env.render()
                 action = env.renderer.get_full_action()
 
-            selection, stop = action
+            selection, roll_choice = action
 
-            _, _, game_terminated, _, _ = env.step((selection, stop))
+            _, _, game_terminated, _, _ = env.step((selection, roll_choice))
 
 
 if __name__ == "__main__":
-    game_bot = ManualPlay()
+    manual_play = ManualPlay()
     # Keep offering to play until the user does not want to play again.
     while True:  # pylint: disable=while-used
         game_number_of_bots: int = int(input("Enter number of bots you want to play against (0 - 6): "))
         game_env = PickominoEnv(game_number_of_bots, render_mode="human")
-        game_bot.play_manual_game_human(game_env)
+        manual_play.play(game_env)
 
         play_again: bool = bool(int(input("Play again? Enter '1', else '0': ")))
         if not play_again:
