@@ -264,7 +264,7 @@ class Renderer:
             self._dice_rects.append(dice_rect)
 
             # Hover effect
-            is_hovered = dice_rect.collidepoint(self._mouse_pos)
+            is_hovered = dice_rect.collidepoint(self._mouse_pos) or self._action_click_dice == index
             if is_hovered:
                 highlight_rect = pygame.Rect(x - 3, y - 3, DIE_SIZE + 6, DIE_SIZE + 6)
                 pygame.draw.rect(self._window, (255, 255, 0), highlight_rect, width=3, border_radius=5)
@@ -352,8 +352,8 @@ class Renderer:
         self._stop_button_rect = pygame.Rect(stop_x, stop_y, BUTTON_WIDTH, BUTTON_HEIGHT)
 
         # Check the hover state.
-        roll_hovered = self._roll_button_rect.collidepoint(self._mouse_pos)
-        stop_hovered = self._stop_button_rect.collidepoint(self._mouse_pos)
+        roll_hovered = self._roll_button_rect.collidepoint(self._mouse_pos) or self._action_click_button == 0
+        stop_hovered = self._stop_button_rect.collidepoint(self._mouse_pos) or self._action_click_button == 1
 
         # Draw the Roll button.
         roll_color = BUTTON_HOVER_COLOR if roll_hovered else BUTTON_COLOR
