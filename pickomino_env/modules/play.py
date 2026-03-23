@@ -19,6 +19,7 @@ class ManualPlay:  # pylint: disable=too-few-public-methods.
 
         game_terminated: bool = False
 
+
         for _ in range(self.MAX_TURNS):
             if game_terminated:
                 break
@@ -31,8 +32,7 @@ class ManualPlay:  # pylint: disable=too-few-public-methods.
 
             selection, roll_choice = action
 
-            _, _, game_terminated, game_truncated, info = env.step((selection, roll_choice))
-            env.renderer.set_error_message(info.get("explanation") if game_truncated else None)
+            _, _, game_terminated, _, _ = env.step((selection, roll_choice))
 
 
 if __name__ == "__main__":

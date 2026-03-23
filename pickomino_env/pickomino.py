@@ -219,6 +219,8 @@ class PickominoEnv(gym.Env):  # type: ignore[type-arg]
             self._game.players,
             self._game.tiles,
             self._game.current_player_index,
+            self._game.truncated,
+            self._game.explanation
         )
 
     @property

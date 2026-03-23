@@ -113,12 +113,15 @@ class Renderer:
         players: list[Player],
         tiles: Tiles,
         current_player_index: int,
+        game_truncated: bool,
+        explanation: str
     ) -> NDArray[np.uint8] | None:  # pyright: ignore[reportInvalidTypeForm]
         """Render the environment."""
         self._game.dice = dice
         self._game.players = players
         self._game.tiles = tiles
         self._game.current_player_index = current_player_index
+        self._error_message = explanation if game_truncated else None
 
         if self._render_mode is None:
             return None
@@ -208,9 +211,6 @@ class Renderer:
             self._action_click_button = None
             return self._action
         return None
-
-    def set_error_message(self, message: str | None) -> None:
-        self._error_message = message
 
     def _draw_players(self) -> None:
         """Draw player names and their top tile."""
@@ -392,6 +392,7 @@ class Renderer:
             self._window.blit(surface, (ACTION_DISPLAY_X, ACTION_DISPLAY_Y))
 
     def _draw_error_message(self) -> None:
+        """Draw the error message. Only active if the last action is invalid"""
         if self._error_message is None or self._window is None:
             return
         font = pygame.font.SysFont(None, ACTION_FONT_SIZE)
