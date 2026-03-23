@@ -43,7 +43,7 @@ __all__ = [
     "NUM_DICE",
     "NUM_DIE_FACES",
     "PLAYERS_START_Y",
-    "PLAYER_TILE_SPACING",
+    "PLAYERS_TILE_SPACING",
     "PLAYER_HIGHLIGHT_COLOR",
     "PLAYER_NAME_FONT_SIZE",
     "PLAYER_WIDTH",
@@ -126,7 +126,7 @@ PLAYERS_START_Y: Final[int] = 20
 PLAYER_NAME_FONT_SIZE: Final[int] = 28
 PLAYER_HIGHLIGHT_COLOR: Final[tuple[int, int, int]] = (65, 105, 225)  # Blue
 PLAYER_WIDTH: Final[int] = 120
-PLAYER_TILE_SPACING: Final[int] = 50
+PLAYERS_TILE_SPACING: Final[int] = 50
 
 # Dice rendering.
 DICE_NAMES: Final[tuple[str, ...]] = (

@@ -47,7 +47,7 @@ from pickomino_env.modules.constants import (
     PLAYER_NAME_FONT_SIZE,
     PLAYER_WIDTH,
     PLAYERS_START_Y,
-    PLAYER_TILE_SPACING,
+    PLAYERS_TILE_SPACING,
     RENDER_FPS,
     RENDER_MODE_HUMAN,
     RENDER_MODE_RGB_ARRAY,
@@ -110,14 +110,16 @@ class Renderer:
         # Error message.
         self._error_message: str | None = None
 
-    def render(
+    # pylint: disable=too-many-arguments
+    def render(  # noqa: PLR0913
         self,
+        *,
         dice: Dice,
         players: list[Player],
         tiles: Tiles,
         current_player_index: int,
         game_truncated: bool,
-        explanation: str
+        explanation: str,
     ) -> NDArray[np.uint8] | None:  # pyright: ignore[reportInvalidTypeForm]
         """Render the environment."""
         self._game.dice = dice
@@ -245,7 +247,7 @@ class Renderer:
                     f"tile_{current_tile}.png",
                 )
                 tile_image = pygame.image.load(str(tile_path))
-                tile_x = x + (PLAYER_WIDTH - TILE_WIDTH + PLAYER_TILE_SPACING) // 2
+                tile_x = x + (PLAYER_WIDTH - TILE_WIDTH + PLAYERS_TILE_SPACING) // 2
                 tile_y = PLAYERS_START_Y + PLAYER_NAME_FONT_SIZE
                 self._window.blit(tile_image, (tile_x, tile_y))
 
@@ -395,11 +397,12 @@ class Renderer:
             self._window.blit(surface, (ACTION_DISPLAY_X, ACTION_DISPLAY_Y))
 
     def _draw_error_message(self) -> None:
-        """Draw the error message. Only active if the last action is invalid"""
+        """Draw the error message. Only active if the last action is invalid."""
         if self._error_message is None or self._window is None:
             return
         font = pygame.font.SysFont(None, ACTION_FONT_SIZE)
-        surface = font.render(f"Error: {self._error_message}", True, (200, 0, 0))
+        antialias = True
+        surface = font.render(f"Error: {self._error_message}", antialias, (200, 0, 0))
         self._window.blit(surface, (ACTION_DISPLAY_X, ACTION_DISPLAY_Y + ACTION_FONT_SIZE + 5))
 
     def _draw_board(self) -> None:

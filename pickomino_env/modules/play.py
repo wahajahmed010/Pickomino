@@ -19,7 +19,6 @@ class ManualPlay:  # pylint: disable=too-few-public-methods.
 
         game_terminated: bool = False
 
-
         for _ in range(self.MAX_TURNS):
             if game_terminated:
                 break
