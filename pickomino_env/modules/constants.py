@@ -34,12 +34,9 @@ __all__ = [
     "DICE_SPACING",
     "DIE_SIZE",
     "FONT_COLOR",
-    "GREEN",
     "LARGEST_TILE",
     "MAX_BOTS",
     "MIN_ROLLS_FOR_WORM_STRATEGY",
-    "NO_GREEN",
-    "NO_RED",
     "NUM_DICE",
     "NUM_DIE_FACES",
     "PLAYERS_START_Y",
@@ -47,7 +44,6 @@ __all__ = [
     "PLAYER_HIGHLIGHT_COLOR",
     "PLAYER_NAME_FONT_SIZE",
     "PLAYER_WIDTH",
-    "RED",
     "RENDER_DELAY",
     "RENDER_FPS",
     "RENDER_MODE_HUMAN",
@@ -67,12 +63,6 @@ __all__ = [
 ]
 
 from typing import Final
-
-# Coloured printouts.
-RED: Final[str] = "\033[31m"
-NO_RED: Final[str] = "\033[0m"
-GREEN: Final[str] = "\033[32m"
-NO_GREEN: Final[str] = "\033[0m"
 
 # Game constants.
 SMALLEST_TILE: Final[int] = 21
