@@ -17,7 +17,10 @@ from pickomino_env.modules.constants import (
     ACTION_DISPLAY_X,
     ACTION_DISPLAY_Y,
     ACTION_FONT_SIZE,
+    ANTIALIAS,
     BACKGROUND_COLOR,
+    BUTTON_BORDER_RADIUS,
+    BUTTON_BORDER_WIDTH,
     BUTTON_COLOR,
     BUTTON_FONT_SIZE,
     BUTTON_HEIGHT,
@@ -38,7 +41,11 @@ from pickomino_env.modules.constants import (
     DICE_SECTION_START_Y,
     DICE_SPACING,
     DIE_SIZE,
+    FONT_BIG,
     FONT_COLOR,
+    FONT_SMALL,
+    GAME_OVER,
+    GAME_OVER_COLOR,
     LARGEST_TILE,
     NUM_DIE_FACES,
     PLAYER_HIGHLIGHT_COLOR,
@@ -48,26 +55,25 @@ from pickomino_env.modules.constants import (
     RENDER_FPS,
     RENDER_MODE_HUMAN,
     RENDER_MODE_RGB_ARRAY,
+    SCORES,
     SMALLEST_TILE,
     TILE_HEIGHT,
     TILE_SPACING,
     TILE_WIDTH,
+    TILES_HOVER_COLOR,
     TILES_PER_ROW,
     TILES_ROW_SPACING,
     TILES_START_X,
     TILES_START_Y,
     WINDOW_HEIGHT,
     WINDOW_WIDTH,
+    WINNER,
+    WINNER_COLOR,
 )
 from pickomino_env.modules.game import Game
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray  # pyright: ignore[reportUnknownVariableType]
-
-    from pickomino_env.modules.dice import Dice
-    from pickomino_env.modules.player import Player
-    from pickomino_env.modules.tiles import Tiles
-
 
 __all__ = ["Renderer"]
 
@@ -101,26 +107,18 @@ class Renderer:
 
         # Dice rectangles.
         self._dice_rects: list[pygame.Rect] = []
-
         self._mouse_pos: tuple[int, int] = (0, 0)
 
         # Game over.
         self._game_over: bool = False
 
-    def render(
-        self,
-        dice: Dice,
-        players: list[Player],
-        tiles: Tiles,
-        current_player_index: int,
-        game_terminated: bool
-    ) -> NDArray[np.uint8] | None:  # pyright: ignore[reportInvalidTypeForm]
+    def render(self, game: Game) -> NDArray[np.uint8] | None:  # pyright: ignore[reportInvalidTypeForm]
         """Render the environment."""
-        self._game.dice = dice
-        self._game.players = players
-        self._game.tiles = tiles
-        self._game.current_player_index = current_player_index
-        self._game.terminated = game_terminated
+        self._game.dice = game.dice
+        self._game.players = game.players
+        self._game.tiles = game.tiles
+        self._game.current_player_index = game.current_player_index
+        self._game.terminated = game.terminated
 
         if self._render_mode is None:
             return None
@@ -273,7 +271,7 @@ class Renderer:
             is_hovered = dice_rect.collidepoint(self._mouse_pos)
             if is_hovered:
                 highlight_rect = pygame.Rect(x - 3, y - 3, DIE_SIZE + 6, DIE_SIZE + 6)
-                pygame.draw.rect(self._window, (255, 255, 0), highlight_rect, width=3, border_radius=5)
+                pygame.draw.rect(self._window, TILES_HOVER_COLOR, highlight_rect, width=3, border_radius=5)
 
         self._draw_dice_counts(0)  # Collected.
         self._draw_dice_counts(1)  # Rolled.
@@ -363,21 +361,31 @@ class Renderer:
 
         # Draw the Roll button.
         roll_color = BUTTON_HOVER_COLOR if roll_hovered else BUTTON_COLOR
-        pygame.draw.rect(self._window, roll_color, self._roll_button_rect, border_radius=10)
-        pygame.draw.rect(self._window, FONT_COLOR, self._roll_button_rect, width=2, border_radius=10)
+        pygame.draw.rect(self._window, roll_color, self._roll_button_rect, border_radius=BUTTON_BORDER_RADIUS)
+        pygame.draw.rect(
+            self._window,
+            FONT_COLOR,
+            self._roll_button_rect,
+            width=BUTTON_BORDER_WIDTH,
+            border_radius=BUTTON_BORDER_RADIUS,
+        )
 
-        antialias = True
-
-        roll_text = self._button_font.render("ROLL", antialias, BUTTON_TEXT_COLOR)
+        roll_text = self._button_font.render("ROLL", ANTIALIAS, BUTTON_TEXT_COLOR)
         roll_text_rect = roll_text.get_rect(center=self._roll_button_rect.center)
         self._window.blit(roll_text, roll_text_rect)
 
         # Draw the Stop button.
         stop_color = BUTTON_HOVER_COLOR if stop_hovered else BUTTON_COLOR
-        pygame.draw.rect(self._window, stop_color, self._stop_button_rect, border_radius=10)
-        pygame.draw.rect(self._window, FONT_COLOR, self._stop_button_rect, width=2, border_radius=10)
+        pygame.draw.rect(self._window, stop_color, self._stop_button_rect, border_radius=BUTTON_BORDER_RADIUS)
+        pygame.draw.rect(
+            self._window,
+            FONT_COLOR,
+            self._stop_button_rect,
+            width=BUTTON_BORDER_WIDTH,
+            border_radius=BUTTON_BORDER_RADIUS,
+        )
 
-        stop_text = self._button_font.render("STOP", antialias, BUTTON_TEXT_COLOR)
+        stop_text = self._button_font.render("STOP", ANTIALIAS, BUTTON_TEXT_COLOR)
         stop_text_rect = stop_text.get_rect(center=self._stop_button_rect.center)
         self._window.blit(stop_text, stop_text_rect)
 
@@ -387,19 +395,38 @@ class Renderer:
             dice_idx, button_action = self._action
             font = pygame.font.SysFont(None, ACTION_FONT_SIZE)
             text = f"Action: ({dice_idx}, {button_action})"
-            antialias = True
-            surface = font.render(text, antialias, ACTION_COLOR)
+
+            surface = font.render(text, ANTIALIAS, ACTION_COLOR)
             self._window.blit(surface, (ACTION_DISPLAY_X, ACTION_DISPLAY_Y))
 
-    def _draw_game_over(self) -> None:
+    def _draw_game_over(self) -> None:  # pylint: disable=too-many-locals
         if self._window is None:
             return
         self._window.fill(BACKGROUND_COLOR)
-        font = pygame.font.SysFont(None, 80)
-        antialias = True
-        surface = font.render("GAME OVER", antialias, (200, 0, 0))
-        rect = surface.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2))
+        font_big = pygame.font.SysFont(None, FONT_BIG)
+        font_small = pygame.font.SysFont(None, FONT_SMALL)
+
+        surface = font_big.render("GAME OVER", ANTIALIAS, GAME_OVER_COLOR)
+        rect = surface.get_rect(center=GAME_OVER)
         self._window.blit(surface, rect)
+
+        # Scores
+        player_score = self._game.players[0].end_score()
+        bot_scores: list[int] = [p.end_score() for p in self._game.players[1:]]
+
+        score_text = f"Your Score: {player_score}   | Bots: {bot_scores}"
+        surf = font_small.render(score_text, ANTIALIAS, FONT_COLOR)
+        x, y = GAME_OVER
+        self._window.blit(surf, surf.get_rect(center=(x, y + SCORES)))
+
+        # Determine winner
+        all_scores: list[int] = [self._game.players[0].end_score(), *bot_scores]
+        winner_index = all_scores.index(max(all_scores))
+        winner_name = self._game.players[winner_index].name
+
+        winner_text = f"Winner: {winner_name} with {max(all_scores)} points"
+        winner_surf = font_small.render(winner_text, ANTIALIAS, WINNER_COLOR)
+        self._window.blit(winner_surf, winner_surf.get_rect(center=(x, y + SCORES + WINNER)))
 
     def _draw_board(self) -> None:
         """Draw the game board with tiles and dice."""
