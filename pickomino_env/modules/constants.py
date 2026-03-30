@@ -40,8 +40,8 @@ __all__ = [
     "FONT_BIG",
     "FONT_COLOR",
     "FONT_SMALL",
-    "GAME_OVER",
     "GAME_OVER_COLOR",
+    "GAME_OVER_POS",
     "LARGEST_TILE",
     "MAX_BOTS",
     "MIN_ROLLS_FOR_WORM_STRATEGY",
@@ -56,7 +56,7 @@ __all__ = [
     "RENDER_FPS",
     "RENDER_MODE_HUMAN",
     "RENDER_MODE_RGB_ARRAY",
-    "SCORES",
+    "SCORES_POS",
     "SMALLEST_TILE",
     "TILES_HOVER_COLOR",
     "TILES_PER_ROW",
@@ -101,16 +101,16 @@ RENDER_MODE_RGB_ARRAY: Final[str] = "rgb_array"
 
 # Rendering frequency and delay for bots.
 RENDER_FPS: Final[int] = 60  # Frames Per Second.
-RENDER_DELAY: Final[float] = 2
+RENDER_DELAY: Final[float] = 0
 
 # Rendering window dimensions.
 WINDOW_WIDTH: Final[int] = 1000
 WINDOW_HEIGHT: Final[int] = 750
 
 # Game Over alignment
-GAME_OVER: Final[tuple[int, int]] = (500, 150)
+GAME_OVER_POS: Final[tuple[int, int]] = (500, 150)
 GAME_OVER_COLOR: Final[tuple[int, int, int]] = (200, 0, 0)
-SCORES: Final[int] = 80
+SCORES_POS: Final[int] = 80
 FONT_BIG: Final[int] = 80
 FONT_SMALL: Final[int] = 40
 

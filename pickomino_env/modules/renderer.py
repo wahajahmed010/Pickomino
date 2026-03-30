@@ -47,8 +47,8 @@ from pickomino_env.modules.constants import (
     FONT_BIG,
     FONT_COLOR,
     FONT_SMALL,
-    GAME_OVER,
     GAME_OVER_COLOR,
+    GAME_OVER_POS,
     LARGEST_TILE,
     NUM_DIE_FACES,
     PLAYER_HIGHLIGHT_COLOR,
@@ -59,7 +59,7 @@ from pickomino_env.modules.constants import (
     RENDER_FPS,
     RENDER_MODE_HUMAN,
     RENDER_MODE_RGB_ARRAY,
-    SCORES,
+    SCORES_POS,
     SMALLEST_TILE,
     TILE_HEIGHT,
     TILE_SPACING,
@@ -418,7 +418,7 @@ class Renderer:
         font_small = pygame.font.SysFont(None, FONT_SMALL)
 
         surface = font_big.render("GAME OVER", ANTIALIAS, GAME_OVER_COLOR)
-        rect = surface.get_rect(center=GAME_OVER)
+        rect = surface.get_rect(center=GAME_OVER_POS)
         self._window.blit(surface, rect)
 
         # Scores
@@ -427,8 +427,8 @@ class Renderer:
 
         score_text = f"Your Score: {player_score}   | Bots: {bot_scores}"
         surf = font_small.render(score_text, ANTIALIAS, FONT_COLOR)
-        x, y = GAME_OVER
-        self._window.blit(surf, surf.get_rect(center=(x, y + SCORES)))
+        x, y = GAME_OVER_POS
+        self._window.blit(surf, surf.get_rect(center=(x, y + SCORES_POS)))
 
         # Determine winner
         all_scores: list[int] = [self._game.players[0].end_score(), *bot_scores]
@@ -437,7 +437,7 @@ class Renderer:
 
         winner_text = f"Winner: {winner_name} with {max(all_scores)} points"
         winner_surf = font_small.render(winner_text, ANTIALIAS, WINNER_COLOR)
-        self._window.blit(winner_surf, winner_surf.get_rect(center=(x, y + SCORES + WINNER)))
+        self._window.blit(winner_surf, winner_surf.get_rect(center=(x, y + SCORES_POS + WINNER)))
 
     def _draw_board(self) -> None:
         """Draw the game board with tiles and dice."""
