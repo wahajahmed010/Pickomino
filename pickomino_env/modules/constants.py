@@ -36,6 +36,7 @@ __all__ = [
     "DICE_SECTION_START_Y",
     "DICE_SPACING",
     "DIE_SIZE",
+    "ERROR_MESSAGE_COLOR",
     "FONT_BIG",
     "FONT_COLOR",
     "FONT_SMALL",
@@ -112,6 +113,9 @@ GAME_OVER_COLOR: Final[tuple[int, int, int]] = (200, 0, 0)
 SCORES: Final[int] = 80
 FONT_BIG: Final[int] = 80
 FONT_SMALL: Final[int] = 40
+
+# Error Message
+ERROR_MESSAGE_COLOR: Final[tuple[int, int, int]] = (200, 0, 0)
 
 # Winner alignment
 WINNER_COLOR: Final[tuple[int, int, int]] = (255, 215, 0)  # Gold

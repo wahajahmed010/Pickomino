@@ -43,6 +43,7 @@ from pickomino_env.modules.constants import (
     DICE_SECTION_START_Y,
     DICE_SPACING,
     DIE_SIZE,
+    ERROR_MESSAGE_COLOR,
     FONT_BIG,
     FONT_COLOR,
     FONT_SMALL,
@@ -158,7 +159,6 @@ class Renderer:
             self._draw_game_over()
         else:
             self._draw_board()
-            self._draw_buttons()
 
         pygame.display.flip()
         if self._clock is not None:
@@ -407,8 +407,7 @@ class Renderer:
         if self._error_message is None or self._window is None:
             return
         font = pygame.font.SysFont(None, ACTION_FONT_SIZE)
-        antialias = True
-        surface = font.render(f"Error: {self._error_message}", antialias, (200, 0, 0))
+        surface = font.render(f"Error: {self._error_message}", ANTIALIAS, ERROR_MESSAGE_COLOR)
         self._window.blit(surface, (ACTION_DISPLAY_X, ACTION_DISPLAY_Y + ACTION_FONT_SIZE + 5))
 
     def _draw_game_over(self) -> None:  # pylint: disable=too-many-locals
@@ -450,6 +449,7 @@ class Renderer:
         self._draw_tiles()
         self._draw_action_display()
         self._draw_error_message()
+        self._draw_buttons()
 
     def close(self) -> None:
         """Close game."""
