@@ -17,6 +17,8 @@ from pickomino_env.modules.constants import (
     ACTION_DISPLAY_X,
     ACTION_DISPLAY_Y,
     ACTION_FONT_SIZE,
+    ACTION_ROLL,
+    ACTION_STOP,
     ANTIALIAS,
     BACKGROUND_COLOR,
     BUTTON_BORDER_RADIUS,
@@ -52,6 +54,7 @@ from pickomino_env.modules.constants import (
     PLAYER_NAME_FONT_SIZE,
     PLAYER_WIDTH,
     PLAYERS_START_Y,
+    PLAYERS_TILE_SPACING,
     RENDER_FPS,
     RENDER_MODE_HUMAN,
     RENDER_MODE_RGB_ARRAY,
@@ -109,8 +112,8 @@ class Renderer:
         self._dice_rects: list[pygame.Rect] = []
         self._mouse_pos: tuple[int, int] = (0, 0)
 
-        # Game over.
-        self._game_over: bool = False
+        # Error message.
+        self._error_message: str | None = None
 
     def render(self, game: Game) -> NDArray[np.uint8] | None:  # pyright: ignore[reportInvalidTypeForm]
         """Render the environment."""
@@ -119,6 +122,7 @@ class Renderer:
         self._game.tiles = game.tiles
         self._game.current_player_index = game.current_player_index
         self._game.terminated = game.terminated
+        self._error_message = game.explanation if game.truncated else None
 
         if self._render_mode is None:
             return None
@@ -176,9 +180,9 @@ class Renderer:
     def _handle_mouse_click(self, pos: tuple[int, int]) -> None:
         """Handle mouse click events."""
         if self._roll_button_rect and self._roll_button_rect.collidepoint(pos):
-            self._action_click_button = 0  # Roll
+            self._action_click_button = ACTION_ROLL
         elif self._stop_button_rect and self._stop_button_rect.collidepoint(pos):
-            self._action_click_button = 1  # Stop
+            self._action_click_button = ACTION_STOP
 
         # Check dice clicks.
         for index, dice_rect in enumerate(self._dice_rects):
@@ -240,7 +244,7 @@ class Renderer:
                     f"tile_{current_tile}.png",
                 )
                 tile_image = pygame.image.load(str(tile_path))
-                tile_x = x + (PLAYER_WIDTH - TILE_WIDTH) // 2
+                tile_x = x + (PLAYER_WIDTH - TILE_WIDTH + PLAYERS_TILE_SPACING) // 2
                 tile_y = PLAYERS_START_Y + PLAYER_NAME_FONT_SIZE
                 self._window.blit(tile_image, (tile_x, tile_y))
 
@@ -268,7 +272,7 @@ class Renderer:
             self._dice_rects.append(dice_rect)
 
             # Hover effect
-            is_hovered = dice_rect.collidepoint(self._mouse_pos)
+            is_hovered = dice_rect.collidepoint(self._mouse_pos) or self._action_click_dice == index
             if is_hovered:
                 highlight_rect = pygame.Rect(x - 3, y - 3, DIE_SIZE + 6, DIE_SIZE + 6)
                 pygame.draw.rect(self._window, TILES_HOVER_COLOR, highlight_rect, width=3, border_radius=5)
@@ -356,8 +360,8 @@ class Renderer:
         self._stop_button_rect = pygame.Rect(stop_x, stop_y, BUTTON_WIDTH, BUTTON_HEIGHT)
 
         # Check the hover state.
-        roll_hovered = self._roll_button_rect.collidepoint(self._mouse_pos)
-        stop_hovered = self._stop_button_rect.collidepoint(self._mouse_pos)
+        roll_hovered = self._roll_button_rect.collidepoint(self._mouse_pos) or self._action_click_button == ACTION_ROLL
+        stop_hovered = self._stop_button_rect.collidepoint(self._mouse_pos) or self._action_click_button == ACTION_STOP
 
         # Draw the Roll button.
         roll_color = BUTTON_HOVER_COLOR if roll_hovered else BUTTON_COLOR
@@ -395,9 +399,17 @@ class Renderer:
             dice_idx, button_action = self._action
             font = pygame.font.SysFont(None, ACTION_FONT_SIZE)
             text = f"Action: ({dice_idx}, {button_action})"
-
             surface = font.render(text, ANTIALIAS, ACTION_COLOR)
             self._window.blit(surface, (ACTION_DISPLAY_X, ACTION_DISPLAY_Y))
+
+    def _draw_error_message(self) -> None:
+        """Draw the error message. Only active if the last action is invalid."""
+        if self._error_message is None or self._window is None:
+            return
+        font = pygame.font.SysFont(None, ACTION_FONT_SIZE)
+        antialias = True
+        surface = font.render(f"Error: {self._error_message}", antialias, (200, 0, 0))
+        self._window.blit(surface, (ACTION_DISPLAY_X, ACTION_DISPLAY_Y + ACTION_FONT_SIZE + 5))
 
     def _draw_game_over(self) -> None:  # pylint: disable=too-many-locals
         if self._window is None:
@@ -437,6 +449,7 @@ class Renderer:
         self._draw_dice()
         self._draw_tiles()
         self._draw_action_display()
+        self._draw_error_message()
 
     def close(self) -> None:
         """Close game."""
