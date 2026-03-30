@@ -41,7 +41,7 @@ Action = [dice_face (0-5), action_type (0=roll, 1=stop)].
     - 5 -> face worm
 
 
-- 0–1: Roll (0) or stop (1).
+- 0-1: Roll (0) or stop (1).
 
 ## Observation Space
 
