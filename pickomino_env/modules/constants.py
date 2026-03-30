@@ -12,9 +12,12 @@ __all__ = [
     "ACTION_ROLL",
     "ACTION_STOP",
     "ACTION_TUPLE_LENGTH",
+    "ANTIALIAS",
     "BACKGROUND_COLOR",
     "BUTTONS_START_X",
     "BUTTONS_START_Y",
+    "BUTTON_BORDER_RADIUS",
+    "BUTTON_BORDER_WIDTH",
     "BUTTON_COLOR",
     "BUTTON_FONT_SIZE",
     "BUTTON_HEIGHT",
@@ -33,7 +36,12 @@ __all__ = [
     "DICE_SECTION_START_Y",
     "DICE_SPACING",
     "DIE_SIZE",
+    "ERROR_MESSAGE_COLOR",
+    "FONT_BIG",
     "FONT_COLOR",
+    "FONT_SMALL",
+    "GAME_OVER_COLOR",
+    "GAME_OVER_POS",
     "LARGEST_TILE",
     "MAX_BOTS",
     "MIN_ROLLS_FOR_WORM_STRATEGY",
@@ -48,7 +56,9 @@ __all__ = [
     "RENDER_FPS",
     "RENDER_MODE_HUMAN",
     "RENDER_MODE_RGB_ARRAY",
+    "SCORES_POS",
     "SMALLEST_TILE",
+    "TILES_HOVER_COLOR",
     "TILES_PER_ROW",
     "TILES_ROW_SPACING",
     "TILES_START_X",
@@ -58,6 +68,8 @@ __all__ = [
     "TILE_WIDTH",
     "WINDOW_HEIGHT",
     "WINDOW_WIDTH",
+    "WINNER",
+    "WINNER_COLOR",
     "WORM_INDEX",
     "WORM_VALUE",
 ]
@@ -89,22 +101,39 @@ RENDER_MODE_RGB_ARRAY: Final[str] = "rgb_array"
 
 # Rendering frequency and delay for bots.
 RENDER_FPS: Final[int] = 60  # Frames Per Second.
-RENDER_DELAY: Final[float] = 2
+RENDER_DELAY: Final[float] = 0
 
 # Rendering window dimensions.
 WINDOW_WIDTH: Final[int] = 1000
 WINDOW_HEIGHT: Final[int] = 750
 
+# Game Over alignment
+GAME_OVER_POS: Final[tuple[int, int]] = (500, 150)
+GAME_OVER_COLOR: Final[tuple[int, int, int]] = (200, 0, 0)
+SCORES_POS: Final[int] = 80
+FONT_BIG: Final[int] = 80
+FONT_SMALL: Final[int] = 40
+
+# Error Message
+ERROR_MESSAGE_COLOR: Final[tuple[int, int, int]] = (200, 0, 0)
+
+# Winner alignment
+WINNER_COLOR: Final[tuple[int, int, int]] = (255, 215, 0)  # Gold
+WINNER: Final[int] = 60
+
 # Button constants
-BUTTON_WIDTH = 120
-BUTTON_HEIGHT = 50
-BUTTON_SPACING = 20
-BUTTONS_START_X = WINDOW_WIDTH - BUTTON_WIDTH - 870
-BUTTONS_START_Y = WINDOW_HEIGHT - 270
-BUTTON_COLOR = (70, 130, 180)  # Steel blue
-BUTTON_HOVER_COLOR = (100, 160, 210)  # Lighter blue
-BUTTON_TEXT_COLOR = (255, 255, 255)  # White
-BUTTON_FONT_SIZE = 28
+BUTTON_WIDTH: Final[int] = 120
+BUTTON_HEIGHT: Final[int] = 50
+BUTTON_SPACING: Final[int] = 20
+BUTTONS_START_X: Final[int] = WINDOW_WIDTH - BUTTON_WIDTH - 870
+BUTTONS_START_Y: Final[int] = WINDOW_HEIGHT - 270
+BUTTON_COLOR: Final[tuple[int, int, int]] = (70, 130, 180)  # Steel blue
+BUTTON_HOVER_COLOR: Final[tuple[int, int, int]] = (100, 160, 210)  # Lighter blue
+BUTTON_TEXT_COLOR: Final[tuple[int, int, int]] = (255, 255, 255)  # White
+BUTTON_FONT_SIZE: Final[int] = 28
+BUTTON_BORDER_RADIUS: Final[int] = 10
+BUTTON_BORDER_WIDTH: Final[int] = 2
+
 
 # Rendering background color Red, Green, Blue (RGB).
 # Muted sage green (100, 140, 100). Dark green (34, 139, 34).
@@ -150,9 +179,12 @@ TILE_SPACING: Final[int] = 8
 TILES_ROW_SPACING: Final[int] = -15
 TILES_START_X: Final[int] = 170
 TILES_START_Y: Final[int] = 480
+TILES_HOVER_COLOR: Final[tuple[int, int, int]] = (255, 255, 0)
 
 # Display action.
-ACTION_DISPLAY_X = 20
-ACTION_DISPLAY_Y = DICE_SECTION_START_Y - 100
-ACTION_FONT_SIZE = 28
-ACTION_COLOR = (0, 0, 0)
+ACTION_DISPLAY_X: Final[int] = 20
+ACTION_DISPLAY_Y: Final[int] = DICE_SECTION_START_Y - 100
+ACTION_FONT_SIZE: Final[int] = 28
+ACTION_COLOR: Final[tuple[int, int, int]] = (0, 0, 0)  # Black
+
+ANTIALIAS: Final[bool] = True

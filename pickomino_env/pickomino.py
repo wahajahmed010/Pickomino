@@ -214,14 +214,7 @@ class PickominoEnv(gym.Env):  # type: ignore[type-arg]
                 "Specify render_mode when creating environment: "
                 "e.g. gymnasium.make('Pickomino-v0', render_mode='human')",
             )
-        return self._renderer.render(  # pyright: ignore[reportUnknownMemberType, reportUnknownVariableType]
-            dice=self._game.dice,
-            players=self._game.players,
-            tiles=self._game.tiles,
-            current_player_index=self._game.current_player_index,
-            game_truncated=self._game.truncated,
-            explanation=self._game.explanation,
-        )
+        return self._renderer.render(self._game)  # pyright: ignore[reportUnknownMemberType, reportUnknownVariableType]
 
     @property
     def renderer(self) -> Renderer:
@@ -260,11 +253,13 @@ class PickominoEnv(gym.Env):  # type: ignore[type-arg]
             "dice_collected": list(self._game.dice.get_collected()),
             "dice_rolled": list(self._game.dice.get_rolled()),
             "terminated": self._game.terminated,
+            "truncated": self._game.truncated,
             "tiles_table_vec": self._tiles_vector(),
             "smallest_tile": self._game.tiles.smallest(),
             "explanation": self._game.explanation,
             "player_stack": self._game.players[0].show_all(),
             "player_score": self._game.players[0].end_score(),
+            "current_player_index": self._game.current_player_index,
             "bot_scores": [player.end_score() for player in self._game.players[1:]],
         }
 
