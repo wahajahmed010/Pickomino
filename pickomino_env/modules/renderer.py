@@ -30,6 +30,7 @@ from pickomino_env.modules.constants import (
     BUTTON_SPACING,
     BUTTON_TEXT_COLOR,
     BUTTON_WIDTH,
+    BUTTON_Y_OFFSET,
     BUTTONS_START_X,
     BUTTONS_START_Y,
     DICE_FONT_SIZE,
@@ -116,6 +117,11 @@ class Renderer:
         # Error message.
         self._error_message: str | None = None
 
+        # Play again
+        self._play_again_yes_rect: pygame.Rect | None = None
+        self._play_again_no_rect: pygame.Rect | None = None
+        self._play_again: bool | None = None
+
     def render(self, game: Game) -> NDArray[np.uint8] | None:  # pyright: ignore[reportInvalidTypeForm]
         """Render the environment."""
         self._game.dice = game.dice
@@ -189,6 +195,15 @@ class Renderer:
             if dice_rect.collidepoint(pos):
                 self._action_click_dice = index
                 break
+
+        self._check_play_again(pos)
+
+    def _check_play_again(self, pos: tuple[int, int]) -> None:
+        # Check play again.
+        if self._play_again_yes_rect and self._play_again_yes_rect.collidepoint(pos):
+            self._play_again = True
+        if self._play_again_no_rect and self._play_again_no_rect.collidepoint(pos):
+            self._play_again = False
 
     def get_action(self) -> int | None:
         """Get the selected action and reset it."""
@@ -410,16 +425,10 @@ class Renderer:
         surface = font.render(f"Error: {self._error_message}", ANTIALIAS, ERROR_MESSAGE_COLOR)
         self._window.blit(surface, (ACTION_DISPLAY_X, ACTION_DISPLAY_Y + ACTION_FONT_SIZE + 5))
 
-    def _draw_game_over(self) -> None:  # pylint: disable=too-many-locals
+    def _show_score(self, font_small: pygame.font.Font) -> None:
+        """Show score on game over screen."""
         if self._window is None:
             return
-        self._window.fill(BACKGROUND_COLOR)
-        font_big = pygame.font.SysFont(None, FONT_BIG)
-        font_small = pygame.font.SysFont(None, FONT_SMALL)
-
-        surface = font_big.render("GAME OVER", ANTIALIAS, GAME_OVER_COLOR)
-        rect = surface.get_rect(center=GAME_OVER_POS)
-        self._window.blit(surface, rect)
 
         # Scores
         player_score = self._game.players[0].end_score()
@@ -430,14 +439,73 @@ class Renderer:
         x, y = GAME_OVER_POS
         self._window.blit(surf, surf.get_rect(center=(x, y + SCORES_POS)))
 
-        # Determine winner
-        all_scores: list[int] = [self._game.players[0].end_score(), *bot_scores]
-        winner_index = all_scores.index(max(all_scores))
-        winner_name = self._game.players[winner_index].name
+    def _determine_winner(self, font_small: pygame.font.Font) -> None:
+        """Determine winner at the end of the game."""
+        if self._window is None:
+            return
 
-        winner_text = f"Winner: {winner_name} with {max(all_scores)} points"
+        # Scores
+        all_scores: list[int] = [p.end_score() for p in self._game.players]
+        max_score = max(all_scores)
+
+        # Among players with the highest score, pick the one with the highest tile
+        candidates = [p for p in self._game.players if p.end_score() == max_score]
+        winner = max(candidates, key=lambda p: p.highest_tile())
+
+        x, y = GAME_OVER_POS
+        winner_text = f"Winner: {winner.name} with {max_score} points"
         winner_surf = font_small.render(winner_text, ANTIALIAS, WINNER_COLOR)
         self._window.blit(winner_surf, winner_surf.get_rect(center=(x, y + SCORES_POS + WINNER)))
+
+    def _draw_play_again(self) -> None:
+        """Draw play again in the game over screen."""
+        if self._window is None:
+            return
+        font = pygame.font.SysFont(None, BUTTON_FONT_SIZE)
+        center_x, center_y = WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2
+
+        question = font.render("Play again?", ANTIALIAS, FONT_COLOR)
+        self._window.blit(question, question.get_rect(center=(center_x, center_y)))
+
+        self._play_again_yes_rect = pygame.Rect(
+            center_x - BUTTON_WIDTH - BUTTON_SPACING // 2, center_y + BUTTON_Y_OFFSET, BUTTON_WIDTH, BUTTON_HEIGHT
+        )
+        self._play_again_no_rect = pygame.Rect(
+            center_x + BUTTON_SPACING // 2, center_y + BUTTON_Y_OFFSET, BUTTON_WIDTH, BUTTON_HEIGHT
+        )
+
+        for rect, label in ((self._play_again_yes_rect, "YES"), (self._play_again_no_rect, "NO")):
+            hovered = rect.collidepoint(self._mouse_pos)
+            pygame.draw.rect(
+                self._window, BUTTON_HOVER_COLOR if hovered else BUTTON_COLOR, rect, border_radius=BUTTON_BORDER_RADIUS
+            )
+            pygame.draw.rect(
+                self._window, FONT_COLOR, rect, width=BUTTON_BORDER_WIDTH, border_radius=BUTTON_BORDER_RADIUS
+            )
+            self._window.blit(
+                font.render(label, ANTIALIAS, BUTTON_TEXT_COLOR),
+                font.render(label, ANTIALIAS, BUTTON_TEXT_COLOR).get_rect(center=rect.center),
+            )
+
+    def _draw_game_over(self) -> None:
+        """Draw game over when game is terminated."""
+        if self._window is None:
+            return
+        self._window.fill(BACKGROUND_COLOR)
+        font_big = pygame.font.SysFont(None, FONT_BIG)
+        font_small = pygame.font.SysFont(None, FONT_SMALL)
+
+        surface = font_big.render("GAME OVER", ANTIALIAS, GAME_OVER_COLOR)
+        rect = surface.get_rect(center=GAME_OVER_POS)
+        self._window.blit(surface, rect)
+
+        self._show_score(font_small)
+        self._determine_winner(font_small)
+        self._draw_play_again()
+
+    def get_play_again(self) -> bool | None:
+        """Return play again for the game loop."""
+        return self._play_again
 
     def _draw_board(self) -> None:
         """Draw the game board with tiles and dice."""
