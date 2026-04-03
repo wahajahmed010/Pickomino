@@ -25,6 +25,7 @@ __all__ = [
     "BUTTON_SPACING",
     "BUTTON_TEXT_COLOR",
     "BUTTON_WIDTH",
+    "BUTTON_Y_OFFSET",
     "DICE_FONT_SIZE",
     "DICE_LABELS_OFFSET_Y",
     "DICE_LABELS_SPACING",
@@ -133,6 +134,7 @@ BUTTON_TEXT_COLOR: Final[tuple[int, int, int]] = (255, 255, 255)  # White
 BUTTON_FONT_SIZE: Final[int] = 28
 BUTTON_BORDER_RADIUS: Final[int] = 10
 BUTTON_BORDER_WIDTH: Final[int] = 2
+BUTTON_Y_OFFSET: Final[int] = 40
 
 
 # Rendering background color Red, Green, Blue (RGB).

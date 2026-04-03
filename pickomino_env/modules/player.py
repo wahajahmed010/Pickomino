@@ -44,3 +44,7 @@ class Player:
         for tile in self.tile_stack:
             score += tiles.worm_values[tile - SMALLEST_TILE]  # List of worm values count from zero.
         return score
+
+    def highest_tile(self) -> int:
+        """Return the highest tile number the player owns."""
+        return max(self.tile_stack, default=0)
