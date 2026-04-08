@@ -47,8 +47,9 @@ The observation is a `dict` with 4 keys:
 | tiles_table    | 0   | 1   | (16,)             |
 | tile_players   | 0   | 36  | number_of_players |
 
-There are eight dice, each with faces 1–5 plus a worm. The worm scores 5 points
-— the same as the 5-eye face. It is not a sixth distinct value.
+There are eight dice, each with faces 1–5 plus a worm. The worm is a sixth
+distinct die face, but it scores 5 points — the same as the 5-eye face — so it
+is not a sixth distinct point value.
 
 The 16 tiles are numbered 21–36 with worm values from one to four, spread across
 four groups. The game supports two to seven players. The RL agent is player one;
