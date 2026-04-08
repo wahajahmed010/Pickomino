@@ -28,7 +28,8 @@ Goal: train a Reinforcement Learning agent for optimal play. Meaning, decide whi
 when to roll and when to stop.
 
 ## Action Space
-The action space is a `Tuple` of two integers:
+The action space is `MultiDiscrete([6, 2])`. The `step()` method accepts both
+the ndarray returned by `action_space.sample()` and a plain Python tuple.
 
 `action = (die_face (0–5), action_type (0=roll, 1=stop))`
 
