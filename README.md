@@ -26,48 +26,36 @@ Goal: train a Reinforcement Learning agent for optimal play. Meaning, decide whi
 when to roll and when to stop.
 
 ## Action Space
+The action space is a `Tuple` of two integers:
 
-The Action space is a tuple with two integers.
-Tuple (int, int)
+`action = [die_face (0–5), action_type (0=roll, 1=stop)]`
 
-Action = [dice_face (0-5), action_type (0=roll, 1=stop)].
-
-- 0-5: Face of the dice, which you want to take, where:
-    - 0 -> face 1
-    - 1 -> face 2
-    - 2 -> face 3
-    - 3 -> face 4
-    - 4 -> face 5
-    - 5 -> face worm
-
-
-- 0-1: Roll (0) or stop (1).
+| Index | die_face | action_type |
+|-------|-----------|-------------|
+| 0–5   | Die face to collect: 0→1 eye, 1→2 eyes, 2→3 eyes, 3→4 eyes, 4→5 eyes, 5→worm | — |
+| 0–1   | — | 0 = roll again, 1 = stop and take a tile |
 
 ## Observation Space
+The observation is a `dict` with 4 keys:
 
-The observation is a `dict` with shape `(4,)` with the values corresponding to the following: dice, table and player.
-
-| Observation    | Min | Max | Shape             |
+| Key            | Min | Max | Shape             |
 |----------------|-----|-----|-------------------|
 | dice_collected | 0   | 8   | (6,)              |
 | dice_rolled    | 0   | 8   | (6,)              |
 | tiles_table    | 0   | 1   | (16,)             |
 | tile_players   | 0   | 36  | number_of_players |
 
-**Note:** There are eight dice to roll and collect. A die has six sides with the number of eyes one through
-five, but a worm instead of a six.
-The values correspond to the number of eyes, with the worm also having the value five (and not six!).
-The 16 tiles are numbered 21 to 36 and have worm values from one to four in spread in four groups.
-The game is for two to seven players. Here your Reinforcement Learning Agent is the first player. The
-other players are computer bots.
-The bots play, according to a heuristic. When you create the environment,
-you have to define the number of bots.
+There are eight dice, each with faces 1–5 plus a worm. The worm scores 5 points
+— the same as the 5-eye face. It is not a sixth distinct value.
 
-For a more detailed description of the rules, see the file pickomino-rulebook.pdf.
-You can play the game online here: https://www.maartenpoirot.com/pickomino/.
-The heuristic used by the bots is described here: https://frozenfractal.com/blog/2015/5/3/how-to-win-at-pickomino/.
+The 16 tiles are numbered 21–36 with worm values from one to four, spread across
+four groups. The game supports two to seven players. The RL agent is player one;
+the remaining players are computer bots controlled by a heuristic. The number of
+bots is set when creating the environment.
 
-## Rewards
+For the full rules see `pickomino-rulebook.pdf` or
+[play online](https://www.maartenpoirot.com/pickomino/).
+The bot heuristic is described [here](https://frozenfractal.com/blog/2015/5/3/how-to-win-at-pickomino/).
 
 The goal is to collect tiles in a stack. The winner is the player, which at the end of the game has the most worms
 on her tiles. For the Reinforcement Learning Agent a reward equal to the value
