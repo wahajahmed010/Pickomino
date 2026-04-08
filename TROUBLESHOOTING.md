@@ -1,6 +1,6 @@
 # Troubleshooting
 
-## pygame window does not open
+## Pygame window does not open
 
 `render_mode="human"` and `pickomino-play` require a display. They will not work
 on headless servers or in environments without a display.
