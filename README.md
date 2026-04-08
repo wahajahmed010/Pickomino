@@ -110,31 +110,41 @@ These must be specified.
 
 ## Setup
 
-`pip install pickomino-env`
+- Python 3.10–3.14
 
-## Play manually
-
-Playing a few games manually is a great way to understand the rules and game dynamics
-before training a Reinforcement Learning agent. Launch the game with the pygame GUI:
-
+## Installation
+We recommend installing in a virtual environment:
+```bash
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+pip install pickomino-env
 ```
+
+Verify your installation:
+```bash
 pickomino-play
 ```
 
-To play against more bots:
-
+## Play manually
+Playing a few games manually is a great way to understand the rules and game dynamics
+before training a Reinforcement Learning agent. Launch the game with the pygame GUI:
+```bash
+pickomino-play
 ```
+To play against more bots:
+```bash
 pickomino-play --number-of-bots=3
 ```
-
-Valid range: 1-6 bots.
+Valid range: 1–6 bots.
 
 ## Usage example
-
 ```python
 import gymnasium as gym
 
-# Create environment
+# render_mode options:
+#   None         — no rendering, fastest (default, recommended for training)
+#   "human"      — pygame window, requires a display
+#   "rgb_array"  — returns RGB array, useful for recording
 env = gym.make("Pickomino-v0", render_mode="human", number_of_bots=2)
 
 # Reset and get initial observation
@@ -146,16 +156,13 @@ truncated = False
 total_reward = 0
 
 while not terminated and not truncated:
-    # Agent selects action: (dice_face, roll_choice)
+    # Agent selects action: (die_face, roll_choice)
     action = env.action_space.sample()  # Random action for demo
-
     # Step environment
     obs, reward, terminated, truncated, info = env.step(action)
     total_reward += reward
-
     if truncated:
         print(f"Invalid action: {info['explanation']}")
-        break
 
 print(f"Episode finished. Total reward: {total_reward}")
 env.close()
