@@ -99,8 +99,10 @@ logging, not for learning.
 Termination occurs when there are no more tiles to take on the table — Game Over.
 
 ### Truncation
-Truncation occurs when the agent attempts an illegal move (e.g. taking a tile
-not currently available). The game continues and a new valid action is required.
+Truncation occurs when the agent attempts an illegal action during dice
+selection or rolling (e.g. selecting a face that was not rolled, selecting a
+face already collected this turn, or choosing to roll when no dice remain).
+The game continues and a new valid action is required.
 
 ### Invalid Actions
 Out-of-range actions (outside [0–5] or [0–1]) raise a `ValueError` and do not
