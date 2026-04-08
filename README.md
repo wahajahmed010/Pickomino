@@ -40,12 +40,12 @@ The action space is a `Tuple` of two integers:
 ## Observation Space
 The observation is a `dict` with 4 keys:
 
-| Key            | Min | Max | Shape             |
-|----------------|-----|-----|-------------------|
-| dice_collected | 0   | 8   | (6,)              |
-| dice_rolled    | 0   | 8   | (6,)              |
-| tiles_table    | 0   | 1   | (16,)             |
-| tile_players   | 0   | 36  | number_of_players |
+| Key            | Min | Max | Shape               |
+|----------------|-----|-----|---------------------|
+| dice_collected | 0   | 8   | (6,)                |
+| dice_rolled    | 0   | 8   | (6,)                |
+| tiles_table    | 0   | 1   | (16,)               |
+| tile_players   | 0   | 36  | (number_of_players,) |
 
 There are eight dice, each with faces 1–5 plus a worm. The worm is a sixth
 distinct die face, but it scores 5 points — the same as the 5-eye face — so it
