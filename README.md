@@ -64,6 +64,25 @@ on her tiles. For the Reinforcement Learning Agent a reward equal to the value
 tile, no negative reward is given. Hence, the total reward at the end of the game
 can be greater than the score.
 
+## Info Dictionary
+
+The `info` dictionary is returned at every step. It is intended for debugging and
+logging, not for learning.
+
+| Key                   | Type        | Description                                              |
+|-----------------------|-------------|----------------------------------------------------------|
+| `dice_collected`      | `list[int]` | Counts of each die face collected this turn              |
+| `dice_rolled`         | `list[int]` | Counts of each die face in the current roll              |
+| `terminated`          | `bool`      | Whether the episode has terminated                       |
+| `truncated`           | `bool`      | Whether the game was truncated due to the last action    |
+| `tiles_table_vec`     | `list[int]` | Binary vector of tiles currently available on the table  |
+| `smallest_tile`       | `int`       | Lowest-numbered tile still on the table                  |
+| `explanation`         | `str`       | Description of the reason for a failed attempt           |
+| `player_stack`        | `list[int]` | All tiles currently held by the agent                    |
+| `player_score`        | `int`       | Agent's current score (sum of worm values)               |
+| `current_player_index`| `int`       | Index of the player whose turn it is                     |
+| `bot_scores`          | `list[int]` | Scores of all bots, in order                             |
+
 ## Starting State
 
 * `dice_collected` = [0, 0, 0, 0, 0, 0].
