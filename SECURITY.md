@@ -23,8 +23,10 @@ Valid bug reports are rewarded with **one physical copy of the Pickomino/Heckmec
 game**, shipped via Amazon.de Prime to any destination covered by Amazon.de Prime
 shipping.
 
-> **One reward per unique bug.** The first valid report of a given issue wins.
-> Duplicate reports are not eligible. Only one reward per person.
+> **Rewards are limited both per unique bug and per person.** For each unique issue,
+> only the first valid report is eligible for a reward, and duplicate reports are not
+> eligible. Each person may receive at most one reward in total, even if they report
+> multiple unique bugs.
 
 -----
 
