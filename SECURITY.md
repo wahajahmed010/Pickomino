@@ -3,7 +3,7 @@
 ## Pickomino — Reinforcement Learning Environment
 
 Pickomino is an open source Reinforcement Learning environment for the board game
-Pickomino/ Heckmeck, confirmed as an external environment in
+Pickomino/Heckmeck, confirmed as an external environment in
 [Farama Gymnasium](https://gymnasium.farama.org/).
 
 This is a small, part-time personal project. The bug bounty program is run in good
