@@ -166,6 +166,10 @@ Valid range: 1–6 bots.
 To change the bot play speed, adjust the `RENDER_DELAY` constant in `constants.py`.
 A higher value slows the bots down, a lower value speeds them up.
 
+```python
+RENDER_DELAY: Final[float] = 2
+``` 
+
 ## Usage example
 ```python
 import gymnasium as gym
