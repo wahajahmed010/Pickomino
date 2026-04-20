@@ -189,6 +189,13 @@ pickomino-play --number-of-bots=3
 
 Valid range: 1–6 bots.
 
+To change the bot play speed, adjust the `RENDER_DELAY` constant in `constants.py`.
+A higher value slows the bots down, a lower value speeds them up.
+
+```python
+RENDER_DELAY: Final[float] = 2
+``` 
+
 ## Usage example
 
 ```python
@@ -231,6 +238,7 @@ report.
 
 - **Game Rules:** [Pickomino Rulebook](https://github.com/smallgig/Pickomino/blob/main/pickomino-rulebook.pdf)
 - **Play Online:** [Maarteen Poirot's Pickomino](https://www.maartenpoirot.com/pickomino/)
+- **Play Board Game Arena:** [Pickomino with elo system](https://boardgamearena.com/14/pickomino?table=818236942)
 - **Bot Strategy:** [How to Win at Pickomino](https://frozenfractal.com/blog/2015/5/3/how-to-win-at-pickomino/)
 - **Repository:** [smallgig/Pickomino](https://github.com/smallgig/Pickomino)
 - **Gymnasium:** [https://gymnasium.farama.org/](https://gymnasium.farama.org/)
