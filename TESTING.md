@@ -20,46 +20,18 @@ part of the pre-commit suite.
 
 ---
 
-## Testing Philosophy
-### Principle: Tests Verify Rules, Not Coverage
-Coverage measures lines executed. It does not measure correctness. This project
-had 96% coverage while hiding bugs in core game logic. Tests must assert that
-game rules are correctly implemented.
-
-### Rules Reference
-Tests are derived from the official Pickomino rulebook:
-[pickomino-rulebook.pdf](https://github.com/smallgig/Pickomino/raw/main/pickomino-rulebook.pdf)
-
-Every rule in the rulebook should map to at least one test.
-
-### Policy: Bug Fix = Failing Test First
-Every bug fix must include a test that:
-1. Fails on the current (buggy) code.
-2. Passes after the fix.
-
-A bug fix PR without a failing test is incomplete.
-
----
-
 ## Test Categories
 
-### Fast Tests (pre-commit, push stage)
-- Location: `test/`
+### Fast Tests
+- Location: `tests/`
 - Purpose: Smoke tests — catch regressions quickly.
-- Run time: Seconds.
 - Assert basic invariants, input validation, no crashes.
-- These do not verify game rules.
 
 ### Rules Tests
-- Location: `test/`
+- Location: `tests/`
 - Purpose: Verify Pickomino game rules are correctly implemented.
 - Each test name describes the rule it verifies.
 - Example: `test_bust_returns_top_tile_and_removes_highest_from_table`
-
-### Mutation Testing
-- Tool: [mutmut](https://mutmut.readthedocs.io/)
-- Purpose: Verify that tests actually detect code changes.
-- If a mutation survives, the test suite has a gap.
 
 ---
 
