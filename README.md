@@ -161,16 +161,16 @@ These must be specified.
 The bots use the following heuristic, inspired by
 [Frozen Fractal's strategy](https://frozenfractal.com/blog/2015/5/3/how-to-win-at-pickomino/):
 
-1. **Take the highest-contributing face.** Choose the die face where
+- **Take the highest-contributing face.** Choose the die face where
    `count × face value` is greatest. Worms count as 5.
-2. **Tie-breaking.** When two faces contribute equally: prefer worms over 5s.
+- **Tie-breaking.** When two faces contribute equally: prefer worms over 5s.
    If still tied, prefer the face with the fewest dice keeping more dice
    available for future rolls. Hence, for example, three 4s are preferred
    over four 3s.
-3. **Worm priority on early rolls.** If no dice have been collected yet and
+- **Worm priority on early rolls.** If no dice have been collected yet and
    this is the third roll or later, take worms if available, regardless of
    contribution.
-4. **Stop as soon as a tile is reachable.** Once the running total meets or
+- **Stop as soon as a tile is reachable.** Once the running total meets or
    exceeds the lowest available tile value and a worm has been collected,
    the bot stops.
 
