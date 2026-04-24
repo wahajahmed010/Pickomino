@@ -27,6 +27,20 @@ An environment conforming to the **Gymnasium** API for the dice game **Pickomino
 Goal: train a Reinforcement Learning agent for optimal play. Meaning, decide which face of the dice to collect,
 when to roll and when to stop.
 
+## Differences from the Physical Game
+
+If you know the physical game, note the following simplifications:
+
+- **Failed attempt:** the highest tile on the table is removed, not turned face-down.
+- **Tile selection:** the best reachable tile is always taken automatically, you cannot
+choose a lower-valued tile like in the physical game.
+- **Stealing:** always performed when possible, you cannot choose.
+- **Win condition:** determined correctly when playing manually with GUI (most worms wins, ties
+broken by highest tile). When training without a renderer, no winner is declared
+use total reward as your metric. But care, stolen tiles do not reduce your reward,
+total reward can exceed your final score.
+- **Stack height:** not included in the observation (visible in the physical game).
+
 ## Action Space
 
 The action space is `MultiDiscrete([6, 2])`. The `step()` method accepts both
@@ -194,7 +208,7 @@ A higher value slows the bots down, a lower value speeds them up.
 
 ```python
 RENDER_DELAY: Final[float] = 2
-``` 
+```
 
 ## Usage example
 
